@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Available Conferences</h2>
+<ul class="list-group">
+    {% for conf in conferences %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <strong>{{ conf.title }}</strong> ({{ conf.date }})<br>
+            Organizer: {{ conf.organizer }}<br>
+            {{ conf.description }}
+        </div>
+        <div>
+            {% if conf.id in registered_ids %}
+                <span class="badge bg-success">Registered</span>
+                <a href="{{ url_for('unregister_conference', conf_id=conf.id) }}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure you want to unregister from this conference?');">Unregister</a>
+            {% else %}
+                <a href="{{ url_for('register_conference', conf_id=conf.id) }}"
+                   class="btn btn-primary btn-sm">Register</a>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+<a href="{{ url_for('dashboard_attendee') }}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}
