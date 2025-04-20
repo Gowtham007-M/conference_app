@@ -18,11 +18,15 @@ def init_db():
         conn.executescript(f.read())
     conn.commit()
     conn.close()
-
-# Route for the home page (redirect to login)
+# Route for the home page (render index.html)
 @app.route('/')
 def index():
-    return redirect(url_for('login'))
+    if 'user_id' in session:  # Check if user is already logged in
+        if session['role'] == 'organizer':
+            return redirect(url_for('dashboard_organizer'))
+        else:
+            return redirect(url_for('dashboard_attendee'))
+    return render_template('index.html')  # Show welcome page if not logged in
 
 # Register new user
 @app.route('/register', methods=['GET', 'POST'])
